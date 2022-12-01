@@ -11,7 +11,6 @@ const Distance = ({ latitude, longitude }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [coordsLatitude, setCoordsLatitude] = useState();
   const [coordsLongitude, setCoordsLongitude] = useState();
-  const [distance, setDistance] = useState();
 
   useEffect(() => {
     const askPermission = async () => {
@@ -22,12 +21,14 @@ const Distance = ({ latitude, longitude }) => {
         setCoordsLongitude(getPosition.coords.longitude);
 
         setIsLoading(false);
+      } else {
+        setError(error);
       }
     };
     askPermission();
   }, []);
 
-  let convert = "";
+  let convertDist = "";
   if (!isLoading) {
     const My_coord = {
       latitude: coordsLatitude,
@@ -35,10 +36,11 @@ const Distance = ({ latitude, longitude }) => {
     };
     const Place_coord = { latitude: latitude, longitude: longitude };
     const dist = getDistance(My_coord, Place_coord);
-    convert = geolib.convertDistance(dist, "km");
+    convertDist = Math.round(geolib.convertDistance(dist, "km") * 100) / 100;
   }
+  //   const rounded = Math.round(convert * 100) / 100;
 
-  return <Text>{convert.toFixed(2)} km</Text>;
+  return <Text>{convertDist} km</Text>;
 };
 
 export default Distance;
