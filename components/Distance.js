@@ -1,3 +1,5 @@
+import * as geolib from "geolib";
+
 import getDistance from "geolib/es/getDistance";
 import { Text } from "react-native";
 
@@ -7,29 +9,36 @@ import { useEffect, useState } from "react";
 const Distance = ({ latitude, longitude }) => {
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [coords, setCoords] = useState();
+  const [coordsLatitude, setCoordsLatitude] = useState();
+  const [coordsLongitude, setCoordsLongitude] = useState();
+  const [distance, setDistance] = useState();
 
   useEffect(() => {
     const askPermission = async () => {
       let getPermission = await Location.requestForegroundPermissionsAsync();
       if ((getPermission.status = "granted")) {
         let getPosition = await Location.getCurrentPositionAsync();
-        setCoords(getPosition.coords);
+        setCoordsLatitude(getPosition.coords.latitude);
+        setCoordsLongitude(getPosition.coords.longitude);
+
         setIsLoading(false);
       }
     };
     askPermission();
   }, []);
 
-  const My_coord = {
-    latitude: coords.latitude,
-    longitude: coords.longitude,
-  };
-  const Place_coord = { latitude: 48.862881, longitude: 2.351543 };
-  let dist = getDistance(My_coord, Place_coord, 1000);
-  console.log(dist);
+  let convert = "";
+  if (!isLoading) {
+    const My_coord = {
+      latitude: coordsLatitude,
+      longitude: coordsLongitude,
+    };
+    const Place_coord = { latitude: latitude, longitude: longitude };
+    const dist = getDistance(My_coord, Place_coord);
+    convert = geolib.convertDistance(dist, "km");
+  }
 
-  return <Text>Hello</Text>;
+  return <Text>{convert.toFixed(2)} km</Text>;
 };
 
 export default Distance;
