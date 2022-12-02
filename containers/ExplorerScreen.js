@@ -79,8 +79,6 @@ const ExplorerScreen = ({ navigation }) => {
                 navigation.navigate("Restaurant", {
                   id: item.placeId,
                   data: data,
-                  latitude: coords.latitude,
-                  longitude: coords.longitude,
                 })
               }
             >

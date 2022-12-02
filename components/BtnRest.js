@@ -18,6 +18,7 @@ const BtnRest = ({ name, text }) => {
           <MaterialIcons name={name} size={24} color="#9069CD" />
         </Text>
       </TouchableOpacity>
+
       <Text>{text}</Text>
     </View>
   );

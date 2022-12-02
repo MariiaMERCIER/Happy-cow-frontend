@@ -1,7 +1,14 @@
-import { Text, Image, View, Dimensions } from "react-native";
-// import MapView, { Marker } from "react-native-maps";
+import {
+  Text,
+  Linking,
+  Image,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
+
 import Swiper from "react-native-swiper";
-import { LatLng, LeafletView } from "react-native-leaflet-view";
+import { LeafletView } from "react-native-leaflet-view";
 
 import BtnRest from "../components/BtnRest";
 import GenerateStars from "../components/GenerateStars";
@@ -10,10 +17,11 @@ import GenerateDollar from "../components/GenerateDollar";
 const RestaurantScreen = ({ route }) => {
   const id = route.params.id;
   const data = route.params.data;
-  const restInfo = data.find((element) => {
-    return element.placeId === id;
+  const restInfo = data.find((restaurant) => {
+    return restaurant.placeId === id;
   });
 
+  console.log(restInfo.address);
   return (
     <>
       <View style={{ width: Dimensions.get("window").width, height: 200 }}>
@@ -29,7 +37,6 @@ const RestaurantScreen = ({ route }) => {
         </Swiper>
       </View>
       <Text>{restInfo.name}</Text>
-
       {restInfo.rating && (
         <Text>
           <GenerateStars rating={restInfo.rating} />
@@ -45,37 +52,35 @@ const RestaurantScreen = ({ route }) => {
         <BtnRest name="create" text="Your view" />
         <BtnRest name="share" text="Share" />
       </View>
-      <View>
+      <View style={{ width: "100%", height: 200 }}>
         <LeafletView
-
-        // mapCenterPosition={{
-        //   lat: route.params.latitude,
-        //   lng: route.params.longitude,
-        // }}
-        // ownPositionMarker={{
-        //   id: "1",
-        //   coords: { lat: route.params.latitude, lng: route.params.longitude },
-        //   icon: "❤️",
-        //   size: [24, 24],
-        //   // animation: {
-        //   //   name: AnimationType.BOUNCE,
-        //   //   duration: ".5",
-        //   //   delay: 0,
-        //   //   interationCount: INFINITE_ANIMATION_ITERATIONS,
-        //   // },
-        // }}
-        />
+          mapCenterPosition={{ lat: 48.856614, lng: 2.3522219 }}
+          zoom={13}
+          mapMarkers={[
+            {
+              position: {
+                lat: restInfo.location.lat,
+                lng: restInfo.location.lng,
+              },
+              title: restInfo.name,
+              icon: "📍",
+              size: [40, 40],
+            },
+          ]}
+        ></LeafletView>
       </View>
-
-      {/* <MapView
-        style={{ width: "100%", height: 250 }}
-        initialRegion={{
-          latitude: route.params.latitude,
-          longitude: route.params.longitude,
-          longitudeDelta: 0.2,
-          latitudeDelta: 0.2,
-        }}
-      ></MapView> */}
+      <Text>{restInfo.address}</Text>
+      {restInfo.phone && <Text>Appeler {restInfo.phone}</Text>}
+      {restInfo.link && (
+        <TouchableOpacity onPress={() => Linking.openURL(restInfo.link)}>
+          <Text>Site web</Text>
+        </TouchableOpacity>
+      )}
+      {restInfo.facebook && (
+        <TouchableOpacity onPress={() => Linking.openURL(restInfo.facebook)}>
+          <Text>Facebook </Text>
+        </TouchableOpacity>
+      )}
     </>
   );
 };
