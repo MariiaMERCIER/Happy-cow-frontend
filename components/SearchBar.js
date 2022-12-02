@@ -5,7 +5,7 @@ const SearchBar = ({ handleSearch }) => {
     <TextInput
       style={{ height: 40, width: "80%" }}
       placeholder="Type Here..."
-      onChangeText={handleSearch}
+      onChangeText={(text) => handleSearch(text)}
     />
   );
 };

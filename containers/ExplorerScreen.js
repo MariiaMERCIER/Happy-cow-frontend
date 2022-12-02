@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import axios from "axios";
+import listRestaurant from "../happy-cow.json";
 
 import * as Location from "expo-location";
 
@@ -18,12 +18,10 @@ import SearchBar from "../components/SearchBar";
 import FiltreType from "../components/FiltreType";
 
 const ExplorerScreen = ({ navigation }) => {
-  const [data, setData] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(listRestaurant);
   const [error, setError] = useState();
   const [geoPermission, setGeoPermission] = useState(false);
-  const [coordsLat, setCoordsLat] = useState();
-  const [coordsLong, setCoordsLong] = useState();
+  const [coords, setCoords] = useState();
 
   useEffect(() => {
     const askPermission = async () => {
@@ -31,9 +29,7 @@ const ExplorerScreen = ({ navigation }) => {
       if ((getPermission.status = "granted")) {
         let getPosition = await Location.getCurrentPositionAsync();
 
-        setCoordsLat(getPosition.coords.latitude);
-        setCoordsLong(getPosition.coords.longitude);
-
+        setCoords(getPosition.coords);
         setGeoPermission(true);
       } else {
         setError(error);
@@ -42,37 +38,23 @@ const ExplorerScreen = ({ navigation }) => {
     askPermission();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(
-        "https://res.cloudinary.com/lereacteur-apollo/raw/upload/v1575242111/10w-full-stack/Scraping/restaurants.json"
-      );
-
-      setData(response.data);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, [geoPermission, coordsLat, coordsLong]);
-
   const handleSearch = (text) => {
-    if (text) {
-      const research = [];
+    const research = [];
+    if (text.length > 0) {
       for (let i = 0; i < data.length; i++) {
         if (data[i].name.includes(text)) {
           research.push(data[i]);
         }
       }
       setData(research);
+    } else {
+      setData(listRestaurant);
     }
   };
 
-  return isLoading ? (
+  return (
     <SafeAreaView>
-      <Text>En chargement</Text>
-    </SafeAreaView>
-  ) : (
-    <SafeAreaView>
-      <SearchBar data={data} handleSearch={handleSearch} />
+      <SearchBar handleSearch={handleSearch} />
       <View style={{ flexDirection: "row" }}>
         <FiltreType />
         <FiltreType />
@@ -112,8 +94,7 @@ const ExplorerScreen = ({ navigation }) => {
               <Distance
                 latitude={item.location.lat}
                 longitude={item.location.lng}
-                coordsLat={coordsLat}
-                coordsLong={coordsLong}
+                coords={coords}
                 geoPermission={geoPermission}
               />
             </TouchableOpacity>
