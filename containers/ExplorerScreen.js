@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import axios from "axios";
 
+import * as Location from "expo-location";
+
 import GenerateStars from "../components/GenerateStars";
 import GenerateDollar from "../components/GenerateDollar";
 import Distance from "../components/Distance";
@@ -18,7 +20,27 @@ import FiltreType from "../components/FiltreType";
 const ExplorerScreen = ({ navigation }) => {
   const [data, setData] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [searchResult, setSearchResult] = useState(null);
+  const [error, setError] = useState();
+  const [geoPermission, setGeoPermission] = useState(false);
+  const [coordsLat, setCoordsLat] = useState();
+  const [coordsLong, setCoordsLong] = useState();
+
+  useEffect(() => {
+    const askPermission = async () => {
+      let getPermission = await Location.requestForegroundPermissionsAsync();
+      if ((getPermission.status = "granted")) {
+        let getPosition = await Location.getCurrentPositionAsync();
+
+        setCoordsLat(getPosition.coords.latitude);
+        setCoordsLong(getPosition.coords.longitude);
+
+        setGeoPermission(true);
+      } else {
+        setError(error);
+      }
+    };
+    askPermission();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,16 +52,18 @@ const ExplorerScreen = ({ navigation }) => {
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  }, [geoPermission, coordsLat, coordsLong]);
 
   const handleSearch = (text) => {
-    let arrayRestaurants = [];
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].name.includes(text)) {
-        arrayRestaurants.push(data[i]);
+    if (text) {
+      const research = [];
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].name.includes(text)) {
+          research.push(data[i]);
+        }
       }
+      setData(research);
     }
-    setSearchResult(arrayRestaurants);
   };
 
   return isLoading ? (
@@ -48,7 +72,7 @@ const ExplorerScreen = ({ navigation }) => {
     </SafeAreaView>
   ) : (
     <SafeAreaView>
-      <SearchBar searchResult={searchResult} handleSearch={handleSearch} />
+      <SearchBar data={data} handleSearch={handleSearch} />
       <View style={{ flexDirection: "row" }}>
         <FiltreType />
         <FiltreType />
@@ -57,14 +81,18 @@ const ExplorerScreen = ({ navigation }) => {
       </View>
 
       <FlatList
-        data={searchResult}
+        data={data}
         keyExtractor={(item) => item.placeId}
         renderItem={({ item }) => {
-          console.log(item.type);
           return (
             <TouchableOpacity
               style={{ borderColor: "green", borderWidth: 1 }}
-              onPress={() => navigation.navigate("Restaurant")}
+              onPress={() =>
+                navigation.navigate("Restaurant", {
+                  id: item.placeId,
+                  data: data,
+                })
+              }
             >
               <Image
                 source={{ uri: item.thumbnail }}
@@ -84,6 +112,9 @@ const ExplorerScreen = ({ navigation }) => {
               <Distance
                 latitude={item.location.lat}
                 longitude={item.location.lng}
+                coordsLat={coordsLat}
+                coordsLong={coordsLong}
+                geoPermission={geoPermission}
               />
             </TouchableOpacity>
           );
