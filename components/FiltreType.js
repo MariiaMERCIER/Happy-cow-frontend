@@ -1,18 +1,28 @@
-import { TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Text,
+  Dimensions,
+} from "react-native";
+import Distance from "./Distance";
 
-const FiltreType = ({ link }) => {
+const FiltreType = ({ link, text, handleFiltre }) => {
   return (
-    <TouchableOpacity style={styles.button}>
+    <TouchableOpacity style={styles.button} onPress={handleFiltre}>
       <Image source={link} style={styles.image} />
+      <Text>{text}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    width: "25%",
-    height: 80,
-    backgroundColor: "lightgreen",
+    width: (Dimensions.get("window").width - 30) / 4,
+    height: 100,
+    borderColor: "orange",
+    borderWidth: 2,
+    flexShrink: "auto",
   },
 
   image: {

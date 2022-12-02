@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   Text,
   TouchableOpacity,
-  View,
+  ScrollView,
 } from "react-native";
 import listRestaurant from "../happy-cow.json";
 
@@ -53,14 +53,20 @@ const ExplorerScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ paddingHorizontal: 15, paddingVertical: 15 }}>
       <SearchBar handleSearch={handleSearch} />
-      <View style={{ flexDirection: "row" }}>
-        <FiltreType />
-        <FiltreType />
-        <FiltreType />
-        <FiltreType />
-      </View>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        horizontal={true}
+        style={{ flexDirection: "row" }}
+      >
+        <FiltreType text="Vegan" />
+        <FiltreType text="Vegatarian" />
+        <FiltreType text="Veg-options" />
+        <FiltreType text="Stores" />
+        <FiltreType text="Ice Cream" />
+        <FiltreType texst="Other" />
+      </ScrollView>
 
       <FlatList
         data={data}
@@ -73,6 +79,8 @@ const ExplorerScreen = ({ navigation }) => {
                 navigation.navigate("Restaurant", {
                   id: item.placeId,
                   data: data,
+                  latitude: coords.latitude,
+                  longitude: coords.longitude,
                 })
               }
             >
