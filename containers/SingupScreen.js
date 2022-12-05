@@ -8,7 +8,7 @@ import axios from "axios";
 import MainBtn from "../components/MainBtn";
 import Input from "../components/Input";
 
-const SignupScreen = ({ handleIdToken }) => {
+const SignupScreen = ({ handleIdToken, setUserEmail, setUserName }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +38,8 @@ const SignupScreen = ({ handleIdToken }) => {
         });
 
         handleIdToken(response.data.token, response.data.id);
+        setUserName(response.data.name);
+        setUserEmail(response.data.email);
 
         alert("Congratulation! You have just joined us :)");
         navigation.navigate("Explorer");

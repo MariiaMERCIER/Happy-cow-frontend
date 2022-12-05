@@ -10,9 +10,9 @@ const FiltreType = ({ link, text, data, setData, listRestaurant }) => {
   let filtre = [];
   const handleFiltre = () => {
     setData(listRestaurant);
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].type.toLowerCase().includes(text.toLowerCase())) {
-        filtre.push(data[i]);
+    for (let i = 0; i < listRestaurant.length; i++) {
+      if (listRestaurant[i].type.toLowerCase().includes(text.toLowerCase())) {
+        filtre.push(listRestaurant[i]);
       }
       setData(filtre);
     }

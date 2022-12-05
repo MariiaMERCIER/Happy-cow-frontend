@@ -28,6 +28,8 @@ const App = () => {
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const handleIdToken = async (token, id) => {
     if (token && id) {
@@ -139,14 +141,35 @@ const App = () => {
               }}
             >
               <Stack.Screen name="Profile">
-                {() => <ProfileScreen userId={userId} userToken={userToken} />}
+                {() => (
+                  <ProfileScreen
+                    handleIdToken={handleIdToken}
+                    setUserEmail={setUserEmail}
+                    setUserName={setUserName}
+                    userName={userName}
+                    userEmail={userEmail}
+                    userToken={userToken}
+                  />
+                )}
               </Stack.Screen>
 
               <Stack.Screen name="SignUp">
-                {() => <SignupScreen handleIdToken={handleIdToken} />}
+                {() => (
+                  <SignupScreen
+                    handleIdToken={handleIdToken}
+                    setUserName={setUserName}
+                    setUserEmail={setUserEmail}
+                  />
+                )}
               </Stack.Screen>
               <Stack.Screen name="LogIn">
-                {() => <LoginScreen handleIdToken={handleIdToken} />}
+                {() => (
+                  <LoginScreen
+                    handleIdToken={handleIdToken}
+                    setUserName={setUserName}
+                    setUserEmail={setUserEmail}
+                  />
+                )}
               </Stack.Screen>
               <Stack.Screen name="Favorites" component={FavoritesScreen} />
             </Stack.Navigator>
