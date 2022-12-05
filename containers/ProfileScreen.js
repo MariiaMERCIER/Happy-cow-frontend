@@ -1,18 +1,24 @@
-import { Text, View, TouchableOpacity } from "react-native";
+import { View, Image } from "react-native";
+import MainBtn from "../components/MainBtn";
+import { useNavigation } from "@react-navigation/native";
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = ({ userToken, userId }) => {
+  const navigation = useNavigation();
   return (
     <View>
-      <Text>I am Profile Screen</Text>
-      <TouchableOpacity onPress={() => navigation.navigate("Favorites")}>
-        <Text>I go to Favorites screen</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-        <Text>I go to SignUp screen</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("LogIn")}>
-        <Text>I go to LogIn screen</Text>
-      </TouchableOpacity>
+      <Image
+        source={require("../assets/happyCow.jpeg")}
+        style={{ width: 200, height: 200 }}
+      />
+
+      <MainBtn
+        text="Sign Up"
+        setFunction={() => navigation.navigate("SignUp")}
+      />
+      <MainBtn
+        text="Log In "
+        setFunction={() => navigation.navigate("LogIn")}
+      />
     </View>
   );
 };

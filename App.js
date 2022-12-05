@@ -2,8 +2,8 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Image } from "react-native";
 
@@ -24,13 +24,36 @@ import {
   Feather,
 } from "@expo/vector-icons";
 
-
-
-
 const App = () => {
+  const [userToken, setUserToken] = useState("");
+  const [userId, setUserId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
+  const handleIdToken = async (token, id) => {
+    if (token && id) {
+      await AsyncStorage.multiSet([
+        ["userToken", token],
+        ["userId", id],
+      ]);
+    } else {
+      await AsyncStorage.multiRemove(["userToken", "userId"]);
+    }
+    setUserId(id);
+    setUserToken(token);
+  };
 
-  
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      const userToken = await AsyncStorage.getItem("userToken");
+      const userId = await AsyncStorage.getItem("userId");
+
+      setUserId(userId);
+      setUserToken(userToken);
+      setIsLoading(false);
+    };
+
+    bootstrapAsync();
+  }, []);
 
   return (
     <NavigationContainer>
@@ -115,9 +138,16 @@ const App = () => {
                 headerTintColor: "white",
               }}
             >
-              <Stack.Screen name="Profile" component={ProfileScreen} />
-              <Stack.Screen name="SignUp" component={SignupScreen} />
-              <Stack.Screen name="LogIn" component={LoginScreen} />
+              <Stack.Screen name="Profile">
+                {() => <ProfileScreen userId={userId} userToken={userToken} />}
+              </Stack.Screen>
+
+              <Stack.Screen name="SignUp">
+                {() => <SignupScreen handleIdToken={handleIdToken} />}
+              </Stack.Screen>
+              <Stack.Screen name="LogIn">
+                {() => <LoginScreen handleIdToken={handleIdToken} />}
+              </Stack.Screen>
               <Stack.Screen name="Favorites" component={FavoritesScreen} />
             </Stack.Navigator>
           )}

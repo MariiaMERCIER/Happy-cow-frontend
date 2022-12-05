@@ -16,6 +16,7 @@ import GenerateDollar from "../components/GenerateDollar";
 import Distance from "../components/Distance";
 import SearchBar from "../components/SearchBar";
 import FiltreType from "../components/FiltreType";
+import { formToJSON } from "axios";
 
 const ExplorerScreen = ({ navigation }) => {
   const [data, setData] = useState(listRestaurant);
@@ -60,18 +61,49 @@ const ExplorerScreen = ({ navigation }) => {
         horizontal={true}
         style={{ flexDirection: "row" }}
       >
-        <FiltreType text="Vegan" />
-        <FiltreType text="Vegatarian" />
-        <FiltreType text="Veg-options" />
-        <FiltreType text="Stores" />
-        <FiltreType text="Ice Cream" />
-        <FiltreType texst="Other" />
+        <FiltreType
+          listRestaurant={listRestaurant}
+          data={data}
+          setData={setData}
+          text="Vegan"
+        />
+        <FiltreType
+          listRestaurant={listRestaurant}
+          data={data}
+          setData={setData}
+          text="Vegetarian"
+        />
+        <FiltreType
+          listRestaurant={listRestaurant}
+          data={data}
+          setData={setData}
+          text="Veg-options"
+        />
+        <FiltreType
+          listRestaurant={listRestaurant}
+          data={data}
+          setData={setData}
+          text="Store"
+        />
+        <FiltreType
+          listRestaurant={listRestaurant}
+          data={data}
+          setData={setData}
+          text="Ice Cream"
+        />
+        <FiltreType
+          listRestaurant={listRestaurant}
+          data={data}
+          setData={setData}
+          texst="Other"
+        />
       </ScrollView>
 
       <FlatList
         data={data}
         keyExtractor={(item) => item.placeId}
         renderItem={({ item }) => {
+          console.log(item.type);
           return (
             <TouchableOpacity
               style={{ borderColor: "green", borderWidth: 1 }}
@@ -97,6 +129,7 @@ const ExplorerScreen = ({ navigation }) => {
               <Text>
                 <GenerateDollar price={item.price} />
               </Text>
+              <Text>{item.type}</Text>
               <Distance
                 latitude={item.location.lat}
                 longitude={item.location.lng}

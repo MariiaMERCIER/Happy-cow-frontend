@@ -5,9 +5,18 @@ import {
   Text,
   Dimensions,
 } from "react-native";
-import Distance from "./Distance";
 
-const FiltreType = ({ link, text, handleFiltre }) => {
+const FiltreType = ({ link, text, data, setData, listRestaurant }) => {
+  let filtre = [];
+  const handleFiltre = () => {
+    setData(listRestaurant);
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].type.toLowerCase().includes(text.toLowerCase())) {
+        filtre.push(data[i]);
+      }
+      setData(filtre);
+    }
+  };
   return (
     <TouchableOpacity style={styles.button} onPress={handleFiltre}>
       <Image source={link} style={styles.image} />
