@@ -1,7 +1,8 @@
 import { Text } from "react-native";
+import MainBtn from "../components/MainBtn";
 
 const PlusScreen = () => {
-  return <Text>I am Plus Screen</Text>;
+  return;
 };
 
 export default PlusScreen;

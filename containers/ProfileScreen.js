@@ -1,24 +1,40 @@
 import { View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import Input from "../components/Input";
 import MainBtn from "../components/MainBtn";
 import axios from "axios";
 
-const ProfileScreen = ({
-  userToken,
-  handleIdToken,
-  userName,
-  userEmail,
-  setUserName,
-  setUserEmail,
-}) => {
+const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
   const navigation = useNavigation();
+
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState("");
   const [imageLoading, setImageLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log(userId, userToken);
+      try {
+        const infoUser = await axios.get(
+          `http://localhost:4000/user/${userId}`,
+          {
+            headers: {
+              authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+        console.log(infoUser.data);
+      } catch (error) {
+        console.log("profileError >>>", error.infoUser.data.message);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleUpdate = async () => {
     if (selectedAvatar) {
@@ -47,7 +63,6 @@ const ProfileScreen = ({
         if (response.data) {
           setImageLoading(false);
           alert("Photo registered");
-          console.log(response.data);
         }
       } catch (error) {
         console.log("catchSendImage >>", error.response.data.error.message);
@@ -104,23 +119,7 @@ const ProfileScreen = ({
     }
   };
 
-  return !userToken ? (
-    <View>
-      <Image
-        source={require("../assets/happyCow.jpeg")}
-        style={{ width: 200, height: 200 }}
-      />
-
-      <MainBtn
-        text="Sign Up"
-        setFunction={() => navigation.navigate("SignUp")}
-      />
-      <MainBtn
-        text="Log In "
-        setFunction={() => navigation.navigate("LogIn")}
-      />
-    </View>
-  ) : (
+  return (
     <>
       <Image
         source={

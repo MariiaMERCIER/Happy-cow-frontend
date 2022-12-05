@@ -28,29 +28,29 @@ const App = () => {
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
 
   const handleIdToken = async (token, id) => {
     if (token && id) {
+      // setUserToken(token);
+      // setUserId(id);
       await AsyncStorage.multiSet([
         ["userToken", token],
         ["userId", id],
       ]);
     } else {
       await AsyncStorage.multiRemove(["userToken", "userId"]);
+
+      // setUserToken(null);
+      // setUserId(null);
     }
-    setUserId(id);
-    setUserToken(token);
   };
 
   useEffect(() => {
     const bootstrapAsync = async () => {
       const userToken = await AsyncStorage.getItem("userToken");
       const userId = await AsyncStorage.getItem("userId");
-
-      setUserId(userId);
       setUserToken(userToken);
+      setUserId(userId);
       setIsLoading(false);
     };
 
@@ -140,38 +140,30 @@ const App = () => {
                 headerTintColor: "white",
               }}
             >
-              <Stack.Screen name="Profile">
-                {() => (
-                  <ProfileScreen
-                    handleIdToken={handleIdToken}
-                    setUserEmail={setUserEmail}
-                    setUserName={setUserName}
-                    userName={userName}
-                    userEmail={userEmail}
-                    userToken={userToken}
-                  />
-                )}
-              </Stack.Screen>
+              {userToken === null ? (
+                <>
+                  <Stack.Screen name="LogIn">
+                    {() => <LoginScreen handleIdToken={handleIdToken} />}
+                  </Stack.Screen>
+                  <Stack.Screen name="SignUp">
+                    {() => <SignupScreen handleIdToken={handleIdToken} />}
+                  </Stack.Screen>
+                </>
+              ) : (
+                <>
+                  <Stack.Screen name="Profile">
+                    {() => (
+                      <ProfileScreen
+                        handleToken={handleIdToken}
+                        userToken={userToken}
+                        userId={userId}
+                      />
+                    )}
+                  </Stack.Screen>
 
-              <Stack.Screen name="SignUp">
-                {() => (
-                  <SignupScreen
-                    handleIdToken={handleIdToken}
-                    setUserName={setUserName}
-                    setUserEmail={setUserEmail}
-                  />
-                )}
-              </Stack.Screen>
-              <Stack.Screen name="LogIn">
-                {() => (
-                  <LoginScreen
-                    handleIdToken={handleIdToken}
-                    setUserName={setUserName}
-                    setUserEmail={setUserEmail}
-                  />
-                )}
-              </Stack.Screen>
-              <Stack.Screen name="Favorites" component={FavoritesScreen} />
+                  <Stack.Screen name="Favorites" component={FavoritesScreen} />
+                </>
+              )}
             </Stack.Navigator>
           )}
         </Tab.Screen>

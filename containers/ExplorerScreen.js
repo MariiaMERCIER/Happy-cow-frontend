@@ -16,7 +16,8 @@ import GenerateDollar from "../components/GenerateDollar";
 import Distance from "../components/Distance";
 import SearchBar from "../components/SearchBar";
 import FiltreType from "../components/FiltreType";
-import { formToJSON } from "axios";
+import ColorType from "../components/ColorType";
+import { color } from "@rneui/base";
 
 const ExplorerScreen = ({ navigation }) => {
   const [data, setData] = useState(listRestaurant);
@@ -103,7 +104,6 @@ const ExplorerScreen = ({ navigation }) => {
         data={data}
         keyExtractor={(item) => item.placeId}
         renderItem={({ item }) => {
-          console.log(item.type);
           return (
             <TouchableOpacity
               style={{ borderColor: "green", borderWidth: 1 }}
@@ -129,7 +129,16 @@ const ExplorerScreen = ({ navigation }) => {
               <Text>
                 <GenerateDollar price={item.price} />
               </Text>
-              <Text>{item.type}</Text>
+              <Text
+                style={{
+                  height: 20,
+                  backgroundColor: ColorType[item.type]
+                    ? ColorType[item.type]
+                    : null,
+                }}
+              >
+                {item.type}
+              </Text>
               <Distance
                 latitude={item.location.lat}
                 longitude={item.location.lng}

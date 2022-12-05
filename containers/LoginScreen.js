@@ -7,7 +7,7 @@ import Input from "../components/Input";
 import MainBtn from "../components/MainBtn";
 import { Ionicons } from "@expo/vector-icons";
 
-const LoginScreen = ({ handleIdToken, setUserEmail, setUserName }) => {
+const LoginScreen = ({ handleIdToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -26,13 +26,10 @@ const LoginScreen = ({ handleIdToken, setUserEmail, setUserName }) => {
         email: email,
         password: password,
       });
-
-      setUserEmail(response.data.email);
-      setUserName(response.data.name);
+      console.log(response.data);
       handleIdToken(response.data.token, response.data.id);
 
-      navigation.push("Explorer");
-
+      navigation.navigate("Explorer");
       alert("Glad to see you back :)");
     } catch (error) {
       console.log("logInCatch >>", error.response.data.message);
