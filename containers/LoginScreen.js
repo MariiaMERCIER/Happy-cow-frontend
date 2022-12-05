@@ -26,7 +26,7 @@ const LoginScreen = ({ handleIdToken }) => {
         email: email,
         password: password,
       });
-      console.log(response.data);
+
       handleIdToken(response.data.token, response.data.id);
 
       navigation.navigate("Explorer");

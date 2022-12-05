@@ -9,6 +9,7 @@ import MainBtn from "../components/MainBtn";
 import axios from "axios";
 
 const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
+  console.log(userToken);
   const navigation = useNavigation();
 
   const [userName, setUserName] = useState("");
@@ -18,7 +19,6 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(userId, userToken);
       try {
         const infoUser = await axios.get(
           `http://localhost:4000/user/${userId}`,

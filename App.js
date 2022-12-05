@@ -30,9 +30,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleIdToken = async (token, id) => {
+    console.log(token, id);
     if (token && id) {
-      // setUserToken(token);
-      // setUserId(id);
       await AsyncStorage.multiSet([
         ["userToken", token],
         ["userId", id],
@@ -40,8 +39,8 @@ const App = () => {
     } else {
       await AsyncStorage.multiRemove(["userToken", "userId"]);
 
-      // setUserToken(null);
-      // setUserId(null);
+      setUserToken(null);
+      setUserId(null);
     }
   };
 
@@ -154,7 +153,7 @@ const App = () => {
                   <Stack.Screen name="Profile">
                     {() => (
                       <ProfileScreen
-                        handleToken={handleIdToken}
+                        handleIdToken={handleIdToken}
                         userToken={userToken}
                         userId={userId}
                       />
