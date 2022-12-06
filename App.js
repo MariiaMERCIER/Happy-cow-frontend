@@ -30,7 +30,6 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleIdToken = async (token, id) => {
-    console.log(token, id);
     if (token && id) {
       await AsyncStorage.multiSet([
         ["userToken", token],
@@ -38,18 +37,18 @@ const App = () => {
       ]);
     } else {
       await AsyncStorage.multiRemove(["userToken", "userId"]);
-
-      setUserToken(null);
-      setUserId(null);
     }
+    setUserToken(token);
+    setUserId(id);
   };
 
   useEffect(() => {
     const bootstrapAsync = async () => {
       const userToken = await AsyncStorage.getItem("userToken");
       const userId = await AsyncStorage.getItem("userId");
-      setUserToken(userToken);
+
       setUserId(userId);
+      setUserToken(userToken);
       setIsLoading(false);
     };
 
@@ -99,8 +98,10 @@ const App = () => {
                   },
                 }}
                 name="Explorer"
-                component={ExplorerScreen}
-              />
+              >
+                {() => <ExplorerScreen userToken={userToken} />}
+              </Stack.Screen>
+
               <Stack.Screen
                 options={{
                   headerStyle: {
@@ -184,7 +185,9 @@ const App = () => {
                 headerTitleAlign: "center",
               }}
             >
-              <Stack.Screen name="Plus" component={PlusScreen} />
+              <Stack.Screen name="Plus">
+                {() => <PlusScreen userId={userId} userToken={userToken} />}
+              </Stack.Screen>
             </Stack.Navigator>
           )}
         </Tab.Screen>

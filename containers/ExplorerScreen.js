@@ -10,6 +10,7 @@ import {
 import listRestaurant from "../happy-cow.json";
 
 import * as Location from "expo-location";
+import axios from "axios";
 
 import GenerateStars from "../components/GenerateStars";
 import GenerateDollar from "../components/GenerateDollar";
@@ -17,9 +18,9 @@ import Distance from "../components/Distance";
 import SearchBar from "../components/SearchBar";
 import FiltreType from "../components/FiltreType";
 import ColorType from "../components/ColorType";
-import { color } from "@rneui/base";
+import HeartFvrt from "../components/HeartFvrt";
 
-const ExplorerScreen = ({ navigation }) => {
+const ExplorerScreen = ({ navigation, userToken }) => {
   const [data, setData] = useState(listRestaurant);
   const [error, setError] = useState();
   const [geoPermission, setGeoPermission] = useState(false);
@@ -51,6 +52,53 @@ const ExplorerScreen = ({ navigation }) => {
       setData(research);
     } else {
       setData(listRestaurant);
+    }
+  };
+
+  const handleFavorite = async ({
+    placeId,
+    name,
+    description,
+    address,
+    rating,
+    type,
+    phone,
+    thumbnail,
+  }) => {
+    console.log(
+      placeId,
+      name,
+      description,
+      address,
+      rating,
+      type,
+      phone,
+      thumbnail
+    );
+    try {
+      const sendFavorite = await axios.put(
+        "http://localhost:4000/favorites/place",
+        {
+          token: userToken,
+          id: placeId,
+          name: name,
+          description: description,
+          adress: address,
+          rating: rating,
+          type: type,
+          phone: phone,
+          photo: thumbnail,
+        },
+
+        {
+          headers: {
+            authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      console.log(sendFavorite.data);
+    } catch (error) {
+      console.log("catchSendFavorite >>>", error.message);
     }
   };
 
@@ -145,6 +193,8 @@ const ExplorerScreen = ({ navigation }) => {
                 coords={coords}
                 geoPermission={geoPermission}
               />
+
+              <HeartFvrt setFunction={() => handleFavorite(item)} />
             </TouchableOpacity>
           );
         }}

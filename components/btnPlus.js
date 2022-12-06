@@ -1,12 +1,10 @@
 import { Text, Image, TouchableOpacity } from "react-native";
 
-const BtnPlus = ({ text, image }) => {
+const BtnPlus = ({ text }) => {
   return (
     <>
-      <Text>Hello {text}!</Text>
-      <Image source={image} />
       <TouchableOpacity>
-        <Text></Text>
+        <Text>{text}</Text>
       </TouchableOpacity>
     </>
   );

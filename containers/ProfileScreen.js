@@ -2,18 +2,19 @@ import { View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
+import Lottie from "../assets/44991-a-fitness-cow.json";
 import { MaterialIcons } from "@expo/vector-icons";
 import Input from "../components/Input";
 import MainBtn from "../components/MainBtn";
-import axios from "axios";
 
 const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
-  console.log(userToken);
   const navigation = useNavigation();
 
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [userImage, setUserImage] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState("");
   const [imageLoading, setImageLoading] = useState(false);
 
@@ -28,13 +29,16 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
             },
           }
         );
-        console.log(infoUser.data);
+
+        setUserImage(infoUser.data.photo);
+        setUserName(infoUser.data.name);
+        setUserEmail(infoUser.data.email);
       } catch (error) {
         console.log("profileError >>>", error.infoUser.data.message);
       }
     };
     fetchData();
-  }, []);
+  }, [userId]);
 
   const handleUpdate = async () => {
     if (selectedAvatar) {
@@ -48,6 +52,7 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
           name: `my-avatar.${tab[1]}`,
           type: `image/${tab[1]}`,
         });
+        formData.append("token", userToken);
 
         const response = await axios.put(
           "http://localhost:4000/user/update",
@@ -55,7 +60,7 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
 
           {
             headers: {
-              authorization: "Bearer " + userToken,
+              authorization: `Bearer ${userToken}`,
               "Content-Type": "multipart/form-data",
             },
           }
@@ -65,7 +70,7 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
           alert("Photo registered");
         }
       } catch (error) {
-        console.log("catchSendImage >>", error.response.data.error.message);
+        console.log("catchSendAvatar >>", error.response.data.message);
       }
     }
     if (userName || userEmail) {
@@ -78,25 +83,26 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
           },
           {
             headers: {
-              authorization: "Bearer " + userToken,
+              authorization: `Bearer ${userToken}`,
             },
           }
         );
         alert("Your profile has been successefully modified");
       } catch (error) {
-        console.log("updateInfo >>", error.response);
+        console.log("updateInfo >>", error.response.data);
       }
     }
   };
 
   const getPermissionPicture = async () => {
     const hasPermisison = await ImagePicker.requestCameraPermissionsAsync();
-
+    console.log(hasPermisison);
     if (hasPermisison.status === "granted") {
       const result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
         aspect: [1, 1],
       });
+      console.log(result.assets[0].uri);
 
       if (result.canceled === true) {
         alert("No photo selected");
@@ -119,12 +125,16 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
     }
   };
 
-  return (
+  return imageLoading ? (
+    <Lottie />
+  ) : (
     <>
       <Image
         source={
           selectedAvatar
             ? { uri: selectedAvatar }
+            : userImage
+            ? { uri: userImage.secure_url }
             : require("../assets/happyCow.jpeg")
         }
         style={{ width: 200, height: 200 }}
