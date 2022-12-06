@@ -161,7 +161,18 @@ const App = () => {
                     )}
                   </Stack.Screen>
 
-                  <Stack.Screen name="Favorites" component={FavoritesScreen} />
+                  <Stack.Screen name="Favorites">
+                    {() => <FavoritesScreen userToken={userToken} />}
+                  </Stack.Screen>
+                  <Stack.Screen
+                    options={{
+                      headerStyle: {
+                        backgroundColor: "#1FAD9E",
+                      },
+                    }}
+                    name="Restaurant"
+                    component={RestaurantScreen}
+                  />
                 </>
               )}
             </Stack.Navigator>

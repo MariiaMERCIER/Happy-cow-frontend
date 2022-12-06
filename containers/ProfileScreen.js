@@ -1,4 +1,4 @@
-import { View, Image } from "react-native";
+import { View, Image, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
@@ -11,12 +11,12 @@ import MainBtn from "../components/MainBtn";
 
 const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
   const navigation = useNavigation();
-
+  const [pageLoading, setPageLoading] = useState(true);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userImage, setUserImage] = useState("");
   const [selectedAvatar, setSelectedAvatar] = useState("");
-  const [imageLoading, setImageLoading] = useState(false);
+  const [infoLoading, setInfoLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +30,7 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
           }
         );
 
+        setPageLoading(false);
         setUserImage(infoUser.data.photo);
         setUserName(infoUser.data.name);
         setUserEmail(infoUser.data.email);
@@ -38,11 +39,11 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
       }
     };
     fetchData();
-  }, [userId]);
+  }, []);
 
   const handleUpdate = async () => {
     if (selectedAvatar) {
-      setImageLoading(true);
+      setInfoLoading(true);
 
       const tab = selectedAvatar.split(".");
       try {
@@ -52,7 +53,6 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
           name: `my-avatar.${tab[1]}`,
           type: `image/${tab[1]}`,
         });
-        formData.append("token", userToken);
 
         const response = await axios.put(
           "http://localhost:4000/user/update",
@@ -65,8 +65,8 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
             },
           }
         );
+
         if (response.data) {
-          setImageLoading(false);
           alert("Photo registered");
         }
       } catch (error) {
@@ -87,6 +87,7 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
             },
           }
         );
+        setInfoLoading(false);
         alert("Your profile has been successefully modified");
       } catch (error) {
         console.log("updateInfo >>", error.response.data);
@@ -124,10 +125,12 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
       alert("Permission refused ");
     }
   };
-
-  return imageLoading ? (
-    <Lottie />
+  return pageLoading ? (
+    <Text>Is loading</Text>
   ) : (
+    // )
+    //   <Lottie />
+    // ) : (
     <>
       <Image
         source={
@@ -159,7 +162,10 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
         text="Update My profile"
         setFunction={handleUpdate}
       />
-      <MainBtn text="Favorite places" />
+      <MainBtn
+        text="Favorite places"
+        setFunction={() => navigation.navigate("Favorites")}
+      />
       <MainBtn text="Log out" setFunction={() => handleIdToken(null)} />
     </>
   );

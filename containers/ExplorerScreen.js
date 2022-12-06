@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import listRestaurant from "../happy-cow.json";
+import { useNavigation } from "@react-navigation/native";
 
 import * as Location from "expo-location";
 import axios from "axios";
@@ -20,11 +21,12 @@ import FiltreType from "../components/FiltreType";
 import ColorType from "../components/ColorType";
 import HeartFvrt from "../components/HeartFvrt";
 
-const ExplorerScreen = ({ navigation, userToken }) => {
+const ExplorerScreen = ({ userToken }) => {
   const [data, setData] = useState(listRestaurant);
   const [error, setError] = useState();
   const [geoPermission, setGeoPermission] = useState(false);
   const [coords, setCoords] = useState();
+  const navigation = useNavigation();
 
   useEffect(() => {
     const askPermission = async () => {
@@ -65,21 +67,10 @@ const ExplorerScreen = ({ navigation, userToken }) => {
     phone,
     thumbnail,
   }) => {
-    console.log(
-      placeId,
-      name,
-      description,
-      address,
-      rating,
-      type,
-      phone,
-      thumbnail
-    );
     try {
       const sendFavorite = await axios.put(
         "http://localhost:4000/favorites/place",
         {
-          token: userToken,
           id: placeId,
           name: name,
           description: description,
@@ -96,9 +87,12 @@ const ExplorerScreen = ({ navigation, userToken }) => {
           },
         }
       );
+
       console.log(sendFavorite.data);
+
+      alert("You have just added your favorite place");
     } catch (error) {
-      console.log("catchSendFavorite >>>", error.message);
+      console.log("catchSendFavorite >>>", error.response.data.message);
     }
   };
 
@@ -158,7 +152,6 @@ const ExplorerScreen = ({ navigation, userToken }) => {
               onPress={() =>
                 navigation.navigate("Restaurant", {
                   id: item.placeId,
-                  data: data,
                 })
               }
             >

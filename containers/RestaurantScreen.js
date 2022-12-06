@@ -6,22 +6,25 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-
+import { useState } from "react";
 import Swiper from "react-native-swiper";
 import { LeafletView } from "react-native-leaflet-view";
+
+import listRestaurant from "../happy-cow.json";
 
 import BtnRest from "../components/BtnRest";
 import GenerateStars from "../components/GenerateStars";
 import GenerateDollar from "../components/GenerateDollar";
 
 const RestaurantScreen = ({ route }) => {
-  const id = route.params.id;
-  const data = route.params.data;
+  const [data, setData] = useState(listRestaurant);
+
+  const id = Number(route.params.id);
+
   const restInfo = data.find((restaurant) => {
     return restaurant.placeId === id;
   });
 
-  console.log(restInfo.address);
   return (
     <>
       <View style={{ width: Dimensions.get("window").width, height: 200 }}>

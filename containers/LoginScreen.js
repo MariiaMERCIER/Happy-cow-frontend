@@ -57,7 +57,7 @@ const LoginScreen = ({ handleIdToken }) => {
       <Text>{errorMessage}</Text>
       <MainBtn text="Join us" setFunction={handleLogIn} />
       <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-        <Text>You have no account?</Text>
+        <Text>You have no account? Sign Up</Text>
       </TouchableOpacity>
     </>
   );

@@ -94,7 +94,7 @@ const SignupScreen = ({ handleIdToken }) => {
 
       <MainBtn text="Join us" setFunction={handleSingUp} />
       <TouchableOpacity onPress={() => navigation.navigate("LogIn")}>
-        <Text>You have already an accout?</Text>
+        <Text>You have already an accout? Log in</Text>
       </TouchableOpacity>
     </>
   );
