@@ -9,21 +9,63 @@ import {
 import { useState } from "react";
 import Swiper from "react-native-swiper";
 import { LeafletView } from "react-native-leaflet-view";
+import axios from "axios";
 
 import listRestaurant from "../happy-cow.json";
 
 import BtnRest from "../components/BtnRest";
 import GenerateStars from "../components/GenerateStars";
 import GenerateDollar from "../components/GenerateDollar";
+import HeartFvrt from "../components/HeartFvrt";
 
-const RestaurantScreen = ({ route }) => {
+import { useRoute } from "@react-navigation/native";
+
+const RestaurantScreen = ({ userToken }) => {
   const [data, setData] = useState(listRestaurant);
 
+  const route = useRoute();
   const id = Number(route.params.id);
 
   const restInfo = data.find((restaurant) => {
     return restaurant.placeId === id;
   });
+
+  const handleFavorite = async ({
+    placeId,
+    name,
+    description,
+    address,
+    rating,
+    type,
+    phone,
+    thumbnail,
+  }) => {
+    try {
+      const sendFavorite = await axios.put(
+        "http://localhost:4000/favorites/place",
+        {
+          id: placeId,
+          name: name,
+          description: description,
+          adress: address,
+          rating: rating,
+          type: type,
+          phone: phone,
+          photo: thumbnail,
+        },
+
+        {
+          headers: {
+            authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+
+      alert("You have just added your favorite place");
+    } catch (error) {
+      console.log("catchSendFavorite >>>", error.message);
+    }
+  };
 
   return (
     <>
@@ -84,6 +126,7 @@ const RestaurantScreen = ({ route }) => {
           <Text>Facebook </Text>
         </TouchableOpacity>
       )}
+      <HeartFvrt setFunction={() => handleFavorite(restInfo)} />
     </>
   );
 };

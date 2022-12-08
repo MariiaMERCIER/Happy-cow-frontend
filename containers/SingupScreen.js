@@ -44,12 +44,12 @@ const SignupScreen = ({ handleIdToken }) => {
         navigation.navigate("Explorer");
       }
     } catch (error) {
-      const messageError = error.response.data.message;
+      const messageError = error.response;
 
       if (messageError === "This mail has alredy been used") {
         setErrorMessage("This mail has alredy been used");
       }
-      console.log("signUpCatch >>", error.response.data.message);
+      console.log("signUpCatch >>", error.response);
     }
   };
   return (

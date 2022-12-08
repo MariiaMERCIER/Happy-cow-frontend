@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  View,
 } from "react-native";
 import listRestaurant from "../happy-cow.json";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +21,7 @@ import SearchBar from "../components/SearchBar";
 import FiltreType from "../components/FiltreType";
 import ColorType from "../components/ColorType";
 import HeartFvrt from "../components/HeartFvrt";
+import BtnListMap from "../components/BtnListMap";
 
 const ExplorerScreen = ({ userToken }) => {
   const [data, setData] = useState(listRestaurant);
@@ -67,6 +69,7 @@ const ExplorerScreen = ({ userToken }) => {
     phone,
     thumbnail,
   }) => {
+    console.log("ID>>>", placeId);
     try {
       const sendFavorite = await axios.put(
         "http://localhost:4000/favorites/place",
@@ -88,11 +91,12 @@ const ExplorerScreen = ({ userToken }) => {
         }
       );
 
-      console.log(sendFavorite.data);
-
       alert("You have just added your favorite place");
     } catch (error) {
-      console.log("catchSendFavorite >>>", error.response.data.message);
+      if (error.response.data === "This place has already been in your list") {
+        alert("This place has already been in your list");
+      }
+      console.log("catchSendFavorite >>>", error.response.data);
     }
   };
 
@@ -141,7 +145,10 @@ const ExplorerScreen = ({ userToken }) => {
           texst="Other"
         />
       </ScrollView>
-
+      <View style={{ flexDirection: "row" }}>
+        <BtnListMap text="map" setFunction={() => navigation.navigate("Map")} />
+        <BtnListMap text="list" />
+      </View>
       <FlatList
         data={data}
         keyExtractor={(item) => item.placeId}

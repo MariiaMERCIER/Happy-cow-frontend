@@ -32,7 +32,7 @@ const LoginScreen = ({ handleIdToken }) => {
       navigation.navigate("Explorer");
       alert("Glad to see you back :)");
     } catch (error) {
-      console.log("logInCatch >>", error.response.data.message);
+      console.log("logInCatch >>", error.response.data);
     }
   };
 

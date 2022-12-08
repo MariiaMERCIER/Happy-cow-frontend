@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Text, FlatList, TouchableOpacity, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import axios from "axios";
 import GenerateStars from "../components/GenerateStars";
 import ColorType from "../components/ColorType";
+import { AntDesign } from "@expo/vector-icons";
 
 const FavoritesScreen = ({ userToken }) => {
   const [favoriteData, setFavoriteData] = useState("");
@@ -12,16 +12,43 @@ const FavoritesScreen = ({ userToken }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const favoriteInfo = await axios.get("http://localhost:4000/favorites", {
-        headers: {
-          authorization: `Bearer ${userToken}`,
-        },
-      });
-      console.log(favoriteInfo.data);
-      setFavoriteData(favoriteInfo.data);
+      try {
+        const favoriteInfo = await axios.get(
+          "http://localhost:4000/favorites",
+          {
+            headers: {
+              authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+
+        setFavoriteData(favoriteInfo.data);
+      } catch (error) {
+        console.log("favoriteInfoCatch >>>", error.response);
+      }
     };
     fetchData();
-  }, []);
+  }, [favoriteData]);
+
+  const handleDelete = async ({ id }) => {
+    try {
+      const favoriteUpdate = await axios.put(
+        "http://localhost:4000/favorites/delete",
+        {
+          id: id,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+
+      // setFavoriteData(favoriteUpdate.data);
+    } catch (error) {
+      console.log("favoriteDelete >>>", error.message);
+    }
+  };
 
   return (
     <View>
@@ -61,6 +88,9 @@ const FavoritesScreen = ({ userToken }) => {
               >
                 {item.kitchenType}
               </Text>
+              <TouchableOpacity onPress={() => handleDelete(item)}>
+                <AntDesign name="close" size={24} color="black" />
+              </TouchableOpacity>
             </TouchableOpacity>
           );
         }}

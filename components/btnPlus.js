@@ -9,3 +9,4 @@ const BtnPlus = ({ text }) => {
     </>
   );
 };
+export default BtnPlus;

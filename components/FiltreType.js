@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderColor: "orange",
     borderWidth: 2,
-    flexShrink: "auto",
   },
 
   image: {

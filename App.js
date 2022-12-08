@@ -17,6 +17,7 @@ import ProfileScreen from "./containers/ProfileScreen";
 import RestaurantScreen from "./containers/RestaurantScreen";
 import SignupScreen from "./containers/SingupScreen";
 import LoginScreen from "./containers/LoginScreen";
+import MapScreen from "./containers/MapScreen";
 
 import {
   FontAwesome5,
@@ -109,8 +110,10 @@ const App = () => {
                   },
                 }}
                 name="Restaurant"
-                component={RestaurantScreen}
-              />
+              >
+                {() => <RestaurantScreen userToken={userToken} />}
+              </Stack.Screen>
+              <Stack.Screen name="Map" component={MapScreen} />
             </Stack.Navigator>
           )}
         </Tab.Screen>
@@ -120,7 +123,7 @@ const App = () => {
               return <FontAwesome5 name="user" size={size} color={color} />;
             },
           }}
-          name="Moi"
+          name="Me"
         >
           {() => (
             <Stack.Navigator
@@ -171,8 +174,9 @@ const App = () => {
                       },
                     }}
                     name="Restaurant"
-                    component={RestaurantScreen}
-                  />
+                  >
+                    {() => <RestaurantScreen userToken={userToken} />}
+                  </Stack.Screen>
                 </>
               )}
             </Stack.Navigator>
