@@ -12,8 +12,10 @@ const MapScreen = () => {
     for (let i = 0; i < listRestaurant.length; i++) {
       arrayMap.push(listRestaurant[i].location);
       arrayMap.push(listRestaurant[i].name);
-      // arrayMap.push({ icon: "📍" });
-      // arrayMap.push({ size: [60, 60] });
+      const icon = "📍";
+      arrayMap.push(icon);
+      const size = [60, 60];
+      arrayMap.push(size);
     }
     console.log("ARRAyMAP>>>>>>>>>>>>", arrayMap);
     return arrayMap;
