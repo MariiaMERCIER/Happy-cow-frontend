@@ -14,6 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import axios from "axios";
 
+import { FontAwesome } from "@expo/vector-icons";
+
 import GenerateStars from "../components/GenerateStars";
 import GenerateDollar from "../components/GenerateDollar";
 import Distance from "../components/Distance";
@@ -21,7 +23,6 @@ import SearchBar from "../components/SearchBar";
 import FiltreType from "../components/FiltreType";
 import ColorType from "../components/ColorType";
 import HeartFvrt from "../components/HeartFvrt";
-import BtnListMap from "../components/BtnListMap";
 
 const ExplorerScreen = ({ userToken }) => {
   const [data, setData] = useState(listRestaurant);
@@ -46,6 +47,7 @@ const ExplorerScreen = ({ userToken }) => {
   }, []);
 
   const handleSearch = (text) => {
+    console.log("SEARCH>>>>", text);
     const research = [];
     if (text.length > 0) {
       for (let i = 0; i < data.length; i++) {
@@ -55,6 +57,7 @@ const ExplorerScreen = ({ userToken }) => {
       }
       setData(research);
     } else {
+      console.log("else");
       setData(listRestaurant);
     }
   };
@@ -103,6 +106,9 @@ const ExplorerScreen = ({ userToken }) => {
   return (
     <SafeAreaView style={{ paddingHorizontal: 15, paddingVertical: 15 }}>
       <SearchBar handleSearch={handleSearch} />
+      <TouchableOpacity onPress={() => navigation.navigate("Map")}>
+        <FontAwesome name="map-o" size={24} color="black" />
+      </TouchableOpacity>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal={true}
@@ -145,10 +151,7 @@ const ExplorerScreen = ({ userToken }) => {
           texst="Other"
         />
       </ScrollView>
-      <View style={{ flexDirection: "row" }}>
-        <BtnListMap text="map" setFunction={() => navigation.navigate("Map")} />
-        <BtnListMap text="list" />
-      </View>
+
       <FlatList
         data={data}
         keyExtractor={(item) => item.placeId}
