@@ -50,9 +50,9 @@ const ExplorerScreen = ({ userToken }) => {
     console.log("SEARCH>>>>", text);
     const research = [];
     if (text.length > 0) {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].name.includes(text)) {
-          research.push(data[i]);
+      for (let i = 0; i < listRestaurant.length; i++) {
+        if (listRestaurant[i].name.includes(text)) {
+          research.push(listRestaurant[i]);
         }
       }
       setData(research);
