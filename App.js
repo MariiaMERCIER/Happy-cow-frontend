@@ -3,9 +3,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect } from "react";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -92,12 +95,21 @@ const App = () => {
               }}
             >
               <Stack.Screen
-                options={{
+                options={({ navigation }) => ({
                   headerStyle: {
                     backgroundColor: "#9069CD",
                     color: "white",
                   },
-                }}
+                  headerRight: () => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("Map")}
+                      >
+                        <Ionicons name="map-sharp" size={24} color="white" />
+                      </TouchableOpacity>
+                    );
+                  },
+                })}
                 name="Explorer"
               >
                 {() => <ExplorerScreen userToken={userToken} />}
@@ -113,7 +125,23 @@ const App = () => {
               >
                 {() => <RestaurantScreen userToken={userToken} />}
               </Stack.Screen>
-              <Stack.Screen name="Map" component={MapScreen} />
+              <Stack.Screen
+                options={({ navigation }) => ({
+                  headerStyle: {
+                    backgroundColor: "#9069CD",
+                    color: "white",
+                  },
+                  headerRight: () => {
+                    return (
+                      <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <FontAwesome name="list-ul" size={24} color="white" />
+                      </TouchableOpacity>
+                    );
+                  },
+                })}
+                name="Map"
+                component={MapScreen}
+              />
             </Stack.Navigator>
           )}
         </Tab.Screen>

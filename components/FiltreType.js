@@ -6,15 +6,20 @@ import {
   Dimensions,
 } from "react-native";
 
-const FiltreType = ({ link, text, data, setData, listRestaurant }) => {
+const FiltreType = ({ link, text, setData, listRestaurant }) => {
   let filtre = [];
   const handleFiltre = () => {
     setData(listRestaurant);
-    for (let i = 0; i < listRestaurant.length; i++) {
-      if (listRestaurant[i].type.toLowerCase().includes(text.toLowerCase())) {
-        filtre.push(listRestaurant[i]);
+
+    if (text === "See all") {
+      setData(listRestaurant);
+    } else {
+      for (let i = 0; i < listRestaurant.length; i++) {
+        if (listRestaurant[i].type.toLowerCase().includes(text.toLowerCase())) {
+          filtre.push(listRestaurant[i]);
+        }
+        setData(filtre);
       }
-      setData(filtre);
     }
   };
   return (
@@ -27,10 +32,13 @@ const FiltreType = ({ link, text, data, setData, listRestaurant }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: (Dimensions.get("window").width - 30) / 4,
-    height: 100,
-    borderColor: "orange",
-    borderWidth: 2,
+    height: 40,
+    borderRadius: 50,
+    paddingHorizontal: 10,
+
+    marginLeft: 5,
+    marginBottom: 15,
+    backgroundColor: "#e8e8e8",
   },
 
   image: {

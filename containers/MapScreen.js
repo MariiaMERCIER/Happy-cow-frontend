@@ -34,11 +34,9 @@ const MapScreen = ({ navigation }) => {
       restaurant.size = [60, 60];
       arrayMap.push(restaurant);
     }
-    console.log("ARRAyMAP>>>>>>>>>>>>", arrayMap[0]);
+
     return arrayMap;
   };
-
-  // marketPosition();
 
   return (
     <View style={{ width: "100%", height: "100%" }}>
@@ -47,9 +45,6 @@ const MapScreen = ({ navigation }) => {
         zoom={13}
         mapMarkers={marketPosition()}
       />
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <FontAwesome name="list-ul" size={24} color="black" />
-      </TouchableOpacity>
     </View>
   );
 };
