@@ -1,9 +1,9 @@
-import { TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const BtnRest = ({ name, text }) => {
   return (
-    <View style={{ flexDirection: "column", width: 65, alignItems: "center" }}>
+    <View style={styles.button}>
       <TouchableOpacity
         style={{
           width: 50,
@@ -19,9 +19,22 @@ const BtnRest = ({ name, text }) => {
         </Text>
       </TouchableOpacity>
 
-      <Text>{text}</Text>
+      <Text style={styles.text} t>
+        {text}
+      </Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    flexDirection: "column",
+    width: 100,
+    alignItems: "center",
+  },
+  text: {
+    marginVertical: 5,
+  },
+});
 
 export default BtnRest;

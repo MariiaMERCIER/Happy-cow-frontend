@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#9069CD",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 15,
   },
 
   btnText: {
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
   },
 
   btnWhite: {
+    marginBottom: 15,
     width: 250,
     height: 50,
     borderRadius: 10,

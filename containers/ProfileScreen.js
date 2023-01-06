@@ -1,10 +1,9 @@
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import Lottie from "../assets/44991-a-fitness-cow.json";
 import { MaterialIcons } from "@expo/vector-icons";
 import Input from "../components/Input";
 import MainBtn from "../components/MainBtn";
@@ -126,13 +125,27 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
     }
   };
   return pageLoading ? (
-    <Text>Is loading</Text>
+    <Text style={styles.container}>Is loading</Text>
   ) : (
-    // )
-    //   <Lottie />
-    // ) : (
-    <>
+    <View style={styles.container}>
+      <View style={styles.icon}>
+        <MaterialIcons
+          name="photo-library"
+          size={24}
+          color="black"
+          onPress={getPermissionPicture}
+        />
+
+        <MaterialIcons
+          name="add-a-photo"
+          size={24}
+          color="black"
+          onPress={getPermissionPhoto}
+        />
+      </View>
+
       <Image
+        style={styles.image}
         source={
           selectedAvatar
             ? { uri: selectedAvatar }
@@ -140,23 +153,13 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
             ? { uri: userImage.secure_url }
             : require("../assets/happyCow.jpeg")
         }
-        style={{ width: 200, height: 200 }}
       />
 
-      <MaterialIcons
-        name="photo-library"
-        size={24}
-        color="black"
-        onPress={getPermissionPicture}
-      />
-      <MaterialIcons
-        name="add-a-photo"
-        size={24}
-        color="black"
-        onPress={getPermissionPhoto}
-      />
-      <Input value={userName} setFunction={(text) => setUserName(text)} />
-      <Input value={userEmail} setFunction={(text) => setUserEmail(text)} />
+      <View style={styles.input}>
+        <Input value={userName} setFunction={(text) => setUserName(text)} />
+        <Input value={userEmail} setFunction={(text) => setUserEmail(text)} />
+      </View>
+
       <MainBtn
         backgroundColor={true}
         text="Update My profile"
@@ -167,8 +170,33 @@ const ProfileScreen = ({ userToken, handleIdToken, userId }) => {
         setFunction={() => navigation.navigate("Favorites")}
       />
       <MainBtn text="Log out" setFunction={() => handleIdToken(null)} />
-    </>
+    </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  image: {
+    width: 200,
+    height: 200,
+  },
+
+  icon: {
+    flexDirection: "row",
+    marginLeft: 150,
+    width: 100,
+    justifyContent: "space-evenly",
+  },
+
+  input: {
+    marginBottom: 40,
+  },
+});
 export default ProfileScreen;

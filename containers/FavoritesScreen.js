@@ -3,7 +3,7 @@ import { Text, FlatList, TouchableOpacity, View, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import GenerateStars from "../components/GenerateStars";
-import ColorType from "../components/ColorType";
+import ColorType from "../components/ImageType";
 import { AntDesign } from "@expo/vector-icons";
 
 const FavoritesScreen = ({ userToken }) => {
@@ -43,8 +43,6 @@ const FavoritesScreen = ({ userToken }) => {
           },
         }
       );
-
-      // setFavoriteData(favoriteUpdate.data);
     } catch (error) {
       console.log("favoriteDelete >>>", error.message);
     }

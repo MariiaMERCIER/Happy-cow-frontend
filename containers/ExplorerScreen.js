@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  View,
 } from "react-native";
 import listRestaurant from "../happy-cow.json";
 import { useNavigation } from "@react-navigation/native";
@@ -19,14 +20,15 @@ import GenerateDollar from "../components/GenerateDollar";
 import Distance from "../components/Distance";
 import SearchBar from "../components/SearchBar";
 import FiltreType from "../components/FiltreType";
-import ColorType from "../components/ColorType";
+import ImageType from "../components/ImageType";
 import HeartFvrt from "../components/HeartFvrt";
 
-const ExplorerScreen = ({ userToken }) => {
+const ExplorerScreen = ({ userToken, clicked, setClicked }) => {
   const [data, setData] = useState(listRestaurant);
   const [error, setError] = useState();
   const [geoPermission, setGeoPermission] = useState(false);
   const [coords, setCoords] = useState();
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -55,7 +57,6 @@ const ExplorerScreen = ({ userToken }) => {
       }
       setData(research);
     } else {
-      console.log("else");
       setData(listRestaurant);
     }
   };
@@ -70,7 +71,6 @@ const ExplorerScreen = ({ userToken }) => {
     phone,
     thumbnail,
   }) => {
-    console.log("ID>>>", placeId);
     try {
       const sendFavorite = await axios.put(
         "http://localhost:4000/favorites/place",
@@ -104,7 +104,7 @@ const ExplorerScreen = ({ userToken }) => {
   return (
     <>
       <SearchBar handleSearch={handleSearch} />
-      <SafeAreaView style={style.container}>
+      <SafeAreaView style={styles.container}>
         <ScrollView
           showsHorizontalScrollIndicator={false}
           horizontal={true}
@@ -119,31 +119,37 @@ const ExplorerScreen = ({ userToken }) => {
             listRestaurant={listRestaurant}
             setData={setData}
             text="Vegan"
+            image={require("../assets/category_vegan.png")}
           />
           <FiltreType
             listRestaurant={listRestaurant}
             setData={setData}
             text="Vegetarian"
+            image={require("../assets/category_vegetarian.png")}
           />
           <FiltreType
             listRestaurant={listRestaurant}
             setData={setData}
             text="Veg-options"
+            image={require("../assets/category_veg-options.png")}
           />
           <FiltreType
             listRestaurant={listRestaurant}
             setData={setData}
             text="Store"
+            image={require("../assets/category_health-store.png")}
           />
           <FiltreType
             listRestaurant={listRestaurant}
             setData={setData}
             text="Ice Cream"
+            image={require("../assets/category_ice-cream.png")}
           />
           <FiltreType
             listRestaurant={listRestaurant}
             setData={setData}
-            texst="Other"
+            text="Other"
+            image={require("../assets/category_other.png")}
           />
         </ScrollView>
 
@@ -153,46 +159,59 @@ const ExplorerScreen = ({ userToken }) => {
           renderItem={({ item }) => {
             return (
               <TouchableOpacity
-                style={{ borderColor: "green", borderWidth: 1 }}
+                style={styles.card}
                 onPress={() =>
                   navigation.navigate("Restaurant", {
                     id: item.placeId,
                   })
                 }
               >
-                <Image
-                  source={{ uri: item.thumbnail }}
-                  style={{ width: 50, height: 50 }}
-                />
+                <Image source={{ uri: item.thumbnail }} style={styles.image} />
+                <View>
+                  <View style={styles.row}>
+                    <Text style={styles.title}>{item.name}</Text>
 
-                <Text>{item.name}</Text>
-                <Text numberOfLines={2} ellipsizeMode="tail">
-                  {item.description}
-                </Text>
-                <Text>
-                  <GenerateStars rating={item.rating} />
-                </Text>
-                <Text>
-                  <GenerateDollar price={item.price} />
-                </Text>
-                <Text
-                  style={{
-                    height: 20,
-                    backgroundColor: ColorType[item.type]
-                      ? ColorType[item.type]
-                      : null,
-                  }}
-                >
-                  {item.type}
-                </Text>
-                <Distance
-                  latitude={item.location.lat}
-                  longitude={item.location.lng}
-                  coords={coords}
-                  geoPermission={geoPermission}
-                />
+                    <Image
+                      source={
+                        ImageType[item.type] ? ImageType[item.type] : null
+                      }
+                      alt="type-restaurant"
+                      style={styles.logoType}
+                    />
+                  </View>
 
-                <HeartFvrt setFunction={() => handleFavorite(item)} />
+                  <View style={styles.details}>
+                    <View style={styles.stars}>
+                      <GenerateStars rating={item.rating} />
+                    </View>
+
+                    <Distance
+                      latitude={item.location.lat}
+                      longitude={item.location.lng}
+                      coords={coords}
+                      geoPermission={geoPermission}
+                    />
+                  </View>
+                  <Text
+                    style={styles.text}
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
+                    {item.description}
+                  </Text>
+
+                  <Text>
+                    <GenerateDollar price={item.price} />
+                  </Text>
+                  <View style={styles.heart}>
+                    <HeartFvrt
+                      clicked={clicked}
+                      setFunction={
+                        (() => handleFavorite(item), setClicked(true))
+                      }
+                    />
+                  </View>
+                </View>
               </TouchableOpacity>
             );
           }}
@@ -204,11 +223,59 @@ const ExplorerScreen = ({ userToken }) => {
 
 export default ExplorerScreen;
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
     paddingVertical: 15,
   },
+  card: {
+    borderColor: "lightgrey",
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    flexDirection: "row",
+    height: 180,
+    alignItems: "center",
+  },
+  image: {
+    width: 130,
+    height: 150,
+    marginRight: 15,
+    borderRadius: 5,
+    resizeMode: "cover",
+  },
+  title: {
+    fontSize: 16,
+    width: 200,
+  },
+  text: {
+    fontSize: 14,
+    width: 250,
+  },
 
-  searchBar: {},
+  details: {
+    width: 250,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  row: {
+    width: 250,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 10,
+  },
+
+  logoType: {
+    width: 25,
+    height: 25,
+  },
+
+  stars: {
+    flexDirection: "row",
+  },
+
+  heart: {
+    width: 250,
+    alignItems: "flex-end",
+  },
 });

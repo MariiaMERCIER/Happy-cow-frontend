@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 60,
     backgroundColor: "#9069CD",
-    // alignItems: "center",
+
     justifyContent: "center",
   },
   searchBar: {
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     width: "95%",
     backgroundColor: "white",
     borderRadius: 10,
-    paddingHorizontal: 30,
+    paddingHorizontal: 35,
     marginHorizontal: 10,
   },
   icon: {

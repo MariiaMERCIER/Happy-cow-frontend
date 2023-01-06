@@ -16,7 +16,9 @@ const Input = ({ value, setFunction, placeholder, secureTextEntry }) => {
 const styles = StyleSheet.create({
   input: {
     width: 250,
-    height: 30,
+    height: 50,
+    borderBottomWidth: 2,
+    borderBottomColor: "#9069CD",
   },
 });
 

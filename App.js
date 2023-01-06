@@ -32,6 +32,7 @@ const App = () => {
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [clicked, setClicked] = useState(false);
 
   const handleIdToken = async (token, id) => {
     if (token && id) {
@@ -112,7 +113,13 @@ const App = () => {
                 })}
                 name="Explorer"
               >
-                {() => <ExplorerScreen userToken={userToken} />}
+                {() => (
+                  <ExplorerScreen
+                    userToken={userToken}
+                    clicked={clicked}
+                    setClicked={setClicked}
+                  />
+                )}
               </Stack.Screen>
 
               <Stack.Screen
@@ -123,7 +130,13 @@ const App = () => {
                 }}
                 name="Restaurant"
               >
-                {() => <RestaurantScreen userToken={userToken} />}
+                {() => (
+                  <RestaurantScreen
+                    userToken={userToken}
+                    clicked={clicked}
+                    setClicked={setClicked}
+                  />
+                )}
               </Stack.Screen>
               <Stack.Screen
                 options={({ navigation }) => ({

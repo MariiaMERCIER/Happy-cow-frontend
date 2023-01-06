@@ -1,12 +1,6 @@
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  Text,
-  Dimensions,
-} from "react-native";
+import { TouchableOpacity, StyleSheet, Image, Text, View } from "react-native";
 
-const FiltreType = ({ link, text, setData, listRestaurant }) => {
+const FiltreType = ({ image, text, setData, listRestaurant }) => {
   let filtre = [];
   const handleFiltre = () => {
     setData(listRestaurant);
@@ -22,9 +16,11 @@ const FiltreType = ({ link, text, setData, listRestaurant }) => {
       }
     }
   };
+
   return (
     <TouchableOpacity style={styles.button} onPress={handleFiltre}>
-      <Image source={link} style={styles.image} />
+      {image ? <Image source={image} style={styles.image} alt="logo" /> : null}
+
       <Text>{text}</Text>
     </TouchableOpacity>
   );
@@ -33,17 +29,19 @@ const FiltreType = ({ link, text, setData, listRestaurant }) => {
 const styles = StyleSheet.create({
   button: {
     height: 40,
+    marginLeft: 10,
     borderRadius: 50,
-    paddingHorizontal: 10,
-
-    marginLeft: 5,
+    paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: "#e8e8e8",
+    backgroundColor: "#e8e8eF",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   image: {
-    width: 10,
-    height: 10,
+    marginHorizontal: 15,
+    width: 25,
+    height: 25,
   },
 });
 
