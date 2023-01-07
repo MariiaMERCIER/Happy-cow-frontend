@@ -1,6 +1,6 @@
 import { TextInput, StyleSheet } from "react-native";
 
-const Input = ({ value, setFunction, placeholder, secureTextEntry }) => {
+const Input = ({ value, setFunction, placeholder, secureTextEntry, right }) => {
   return (
     <TextInput
       autoCapitalize="none"
