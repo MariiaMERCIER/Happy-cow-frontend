@@ -47,7 +47,6 @@ const ExplorerScreen = ({ userToken, clicked, setClicked }) => {
   }, []);
 
   const handleSearch = (text) => {
-    console.log("SEARCH>>>>", text);
     const research = [];
     if (text.length > 0) {
       for (let i = 0; i < listRestaurant.length; i++) {
@@ -72,6 +71,16 @@ const ExplorerScreen = ({ userToken, clicked, setClicked }) => {
     thumbnail,
   }) => {
     try {
+      console.log(
+        placeId,
+        name,
+        description,
+        address,
+        rating,
+        type,
+        phone,
+        thumbnail
+      );
       const sendFavorite = await axios.put(
         "http://localhost:4000/favorites/place",
         {
@@ -207,7 +216,8 @@ const ExplorerScreen = ({ userToken, clicked, setClicked }) => {
                     <HeartFvrt
                       clicked={clicked}
                       setFunction={
-                        (() => handleFavorite(item), setClicked(true))
+                        () => handleFavorite(item)
+                        // , setClicked(true)
                       }
                     />
                   </View>
