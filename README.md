@@ -44,7 +44,7 @@ $ yarn start
 Screens:
 
 <img src="https://user-images.githubusercontent.com/102726399/212541234-480db260-335e-40b0-a535-5deaefcfa095.png" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541245-955482a5-91f2-44e4-9ffb-b90252a2f7c7.png
-" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541253-33792005-9ddb-4867-a9aa-6d1cea7ba15f.png" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541255-81eaea61-0a1a-460e-ae80-9d5fbc7d80b3.png" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541259-9c814c3e-e726-4817-8d12-2c86ad1a9d8c.png" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541264-52972bed-0dd4-4275-82ea-0a03082082ed.png" height="550"/>
+" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541639-4544ed5f-503f-43cf-ab7b-6ae9858144d8.png" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541255-81eaea61-0a1a-460e-ae80-9d5fbc7d80b3.png" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541259-9c814c3e-e726-4817-8d12-2c86ad1a9d8c.png" height="550"/>&nbsp;&nbsp;<img src="https://user-images.githubusercontent.com/102726399/212541264-52972bed-0dd4-4275-82ea-0a03082082ed.png" height="550"/>
 
 
 
