@@ -12,7 +12,7 @@
 
 ### General info
 
-This project is replica of application HappyCow (search of vegetarien/vegan cafes, stores) with React Native. You can connect/search cafés/use map/filter information/update your profile information&photo/add favorites places to your favorite list
+This project is replica of application HappyCow (search of vegetarien/vegan cafes, stores) with React Native. You can connect/search cafés/use map/filter information/update your profile information&photo/add favorites places to your favorite list (for this you need download HappyCow-backend)
 
 ### Technologies
 
